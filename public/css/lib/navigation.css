@@ -1,0 +1,113 @@
+/* Navigatioin menu CSS starts here*/
+#navigation li
+{
+	font-size:108%;
+	display:inline; /* ie 6-7 bug, don't use block */
+	text-align:center;
+	float:left;
+}
+#navigation li a
+{
+	float:left;
+	display:block;
+	width:100px;
+	padding: 50px 0 25px;
+
+	color:#444;
+	text-shadow:#fff 0px 1px 0px;
+	text-decoration:none;
+	font-weight:bold;
+	white-space:nowrap;
+
+	background:none;
+
+	-webkit-transition:all 0.4s ease-in-out;
+	-moz-transition:all 0.4s ease-in-out;
+	transition:all 0.4s ease-in-out;
+}
+#navigation li a:hover, #navigation li a.active
+{
+	background: #e1e4f3;
+	background: -webkit-linear-gradient(top, #e1e4f3 0%, #e1e4f3 91%, #c4c9e6 100%);
+	background: -moz-linear-gradient(center top, #e1e4f3 0%, #e1e4f3 91%, #c4c9e6 100%);
+	background: linear-gradient(center top, #e1e4f3 0%, #e1e4f3 91%, #c4c9e6 100%);
+}
+/* Navigatioin menu CSS ends here*/
+
+.breadcrumb
+{
+    color:#9b9b9b;
+    width:auto;
+    margin:5px;
+    padding:10px 0;
+	clear:both;
+}
+
+.breadcrumb li
+{
+    list-style-type:none;
+    float:left;
+    padding-left:10px;
+}
+
+.breadcrumb a
+{
+/*     display:block; */
+/*     padding-right: 15px; */
+    text-decoration: none;
+    color:#454545;
+}
+
+.breadcrumb li span{
+	margin-right: 10px;
+}
+
+.menu li
+{
+    list-style-type:none;
+    float:left;
+    padding-left:10px;
+}
+
+.admin {
+    clear: both;
+    float: right;
+	margin: 0 0 10px;
+    padding: 4px 10px;
+
+	<?php CSS3::gradient('#A3D5E6', '#87BDD9'); ?>
+	<?php CSS3::borderRadius('5px'); ?>
+	<?php CSS3::boxShadow('1px', '#A3D5E6'); ?>
+}
+
+.admin a {
+    border-right: 2px groove lightBlue;
+    color: #fff;
+    margin: 0 2px;
+    padding-right: 10px;
+    text-decoration: none;
+}
+.admin a.active {
+	color: darkBlue;
+}
+.admin li:last-child a{
+    border-right: 0;
+}
+
+.navlink {
+    clear: right;
+    float: right;
+    margin: 5px 0 0;
+    padding: 5px 0 0;
+}
+
+.pagination {
+    clear: left;
+    margin: 25px auto;
+    text-align: center;
+}
+
+.adminNavigation ul {
+	margin-left: 10px;
+}
+

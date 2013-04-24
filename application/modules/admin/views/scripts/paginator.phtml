@@ -1,0 +1,80 @@
+<?php
+/**
+ * @file		paginator.phtml
+ *
+ * @category   	Compassites
+ * @package    	Compassites_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+
+$allParams = Zend_Controller_Front::getInstance()->getRequest()->getParams();
+?>
+<div class="pagination">
+        <!-- First page link -->
+        <?php
+        if (isset($this->previous))
+        {
+        ?>
+            <!-- <a href="<?php echo $this->url(
+            		array_merge($allParams, array('page' => $this->first))
+            	); ?>">Start</a> | -->
+        <?php
+        }
+        else
+        {
+        ?>
+<!--             <span class="disabled">Start</span> | -->
+        <?php
+        }
+        ?>
+         <!-- First page link END -->
+
+        <!-- Previous page link -->
+		<?php
+        if (isset($this->previous))
+        {
+        ?>
+              <a href="<?php echo $this->url(
+              		array_merge($allParams, array('page' => $this->previous))
+              	); ?>">&lt; Previous</a> |
+        <?php
+        }
+        else
+        {
+        ?>
+			<span class="disabled">&lt; Previous |</span>
+        <?php
+        }
+        ?>
+        <!-- Previous page link END -->
+
+        <!-- Numbered page links -->
+        <?php
+			foreach ($this->pagesInRange as $page)
+			{
+		?>
+            <?php if ($page != $this->current): ?>
+                <a href="<?php echo $this->url(
+                		array_merge($allParams, array('page' => $page))
+                	); ?>"><?php echo $page; ?></a>
+            <?php else: ?>
+                <?php echo $page; ?>
+            <?php endif; ?>
+        <?php
+			} // end foreach
+        ?>
+        <!-- Numbered page links END -->
+
+        <!-- Next page link -->
+        <?php if (isset($this->next)): ?>
+             <a id="next" href="<?php echo $this->url(
+             		array_merge($allParams, array('page' => $this->next))
+             	); ?>">| Next &gt;</a> |
+        <?php else: ?>
+           <span id="next" class="disabled">| Next &gt;</span>
+        <?php endif; ?>
+        <!-- Next page link END -->
+ </div>

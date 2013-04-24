@@ -1,0 +1,34 @@
+<?php
+/**
+ * @file		myaccount.phtml
+ *
+ * @category    Compassites
+ * @package    	Compassites_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+
+	#CSS
+	$this->headLink()->prependStylesheet($this->baseUrl().'/css/activate.css');
+
+
+
+?>
+
+
+<div id="myaccount" class="content_left">
+	<h1>My Account</h1>
+	<?php
+		if( $this->formDisplay == true && $this->message == true )
+		{
+			echo $this->form;
+		}
+		elseif( $this->formDisplay == false )
+		{
+			echo '<div class="message warning"> '. $this->message . '</div>';
+		}
+	?>
+
+</div>

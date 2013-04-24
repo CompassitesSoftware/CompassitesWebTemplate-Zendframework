@@ -1,0 +1,26 @@
+<?php
+/**
+ * @file		login.phtml
+ *
+ * @category   	Compassites
+ * @package    	Compassites
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+
+$this->headLink()->appendStylesheet($this->baseUrl('css/form.css'));
+
+?>
+
+<!-- <div class='section login_register_container' id="registerSection" style = "display:none;"> -->
+<div class="content_left">
+	<!--<span class="arrow-white"></span>-->
+	<h1>Register</h1>
+     <?php
+//      $form = new Homeconnect_Form_User();
+// 	 echo $form;
+		echo $this->form;
+     ?>
+</div>

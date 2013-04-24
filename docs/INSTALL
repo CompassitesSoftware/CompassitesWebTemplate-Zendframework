@@ -1,0 +1,30 @@
+SETUP NOTES
+
+SERVER REQUIREMENTS (LAMP stack)
+Fedora 15+ with the default following apps: php 5.3+, mysql 5.5+, apache 2.2+
+OR
+Fedora 15+ with the default following apps: php-fpm 5.3+, mysql 5.5+, nginx 1+
+
+openssh-clients e2fsprogs sysstat ruby rsync
+
+httpd php OR nginx php-fpm
+mysql-server memcached
+php-cli php-xml php-gd php-pdo php-mysql php-mbstring
+php-pecl-memcache php-pecl-apc
+
+CODE
+- svn co code
+- svn co toolkit/Zend_1_11_11 /Minify /ZFDebug /SmartSprite into toolkit folder
+- Create virtual host
+- update application.ini (for database, memcache configs)
+
+FINE TUNNING
+find apache/nginx config in the compassites/scripts/apache/  or nginx folder
+
+
+DATABASE (find sql in the compassites/scripts/database/ folder)
+- create main database
+
+
+svn co http://svn.lan/compassites/trunk compassites
+svn co svn+ssh://svn.lan/compassites/branches/version2 compassites

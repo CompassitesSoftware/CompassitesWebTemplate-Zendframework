@@ -1,0 +1,33 @@
+
+<IfModule mod_headers.c>
+	Header unset Pragma
+	FileETag MTime Size
+	Header set Connection keep-alive
+
+	# cache images/pdf docs for 100 days
+	<FilesMatch "\.(ico|pdf|jpg|jpeg|png|gif|css|js|eot|ttf)$">
+		Header set Cache-Control "max-age=8640000, public, must-revalidate"
+		Header unset Last-Modified
+	</FilesMatch>
+
+	# cache html/htm/xml/txt files for 2 days
+	<FilesMatch "\.(html|htm|xml|txt|xsl)$">
+		Header set Cache-Control "max-age=7200, must-revalidate"
+	</FilesMatch>
+
+	<ifModule mod_deflate.c>
+		# Compress content before it is delivered to the client
+		# Insert filter
+		SetOutputFilter DEFLATE
+
+		# MSIE masquerades as Netscape, but it is fine
+		BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+		# Don't compress images
+		SetEnvIfNoCase Request_URI \
+		\.(?:gif|jpe?g|png)$ no-gzip dont-vary
+
+		# Make sure proxies don't deliver the wrong content
+		Header append Vary User-Agent env=!dont-vary
+	</ifModule>
+</ifModule>

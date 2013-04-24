@@ -1,0 +1,30 @@
+<?php
+/**
+ * @file		activate.phtml
+ *
+ * @category    Compassites
+ * @package    	Compassites_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+
+	#CSS
+	$this->headLink()->appendStylesheet($this->baseUrl().'/css/activate.css');
+
+?>
+
+<div class="content_left">
+	<h1>Activate user</h1>
+	<?php
+			if( !empty($this->message) )
+			{
+				echo '<div class="message warning">'. $this->message.'</div>';
+			}
+			if(true == $this->formDisplay)
+			{
+				echo $this->form;
+			}
+	?>
+</div>

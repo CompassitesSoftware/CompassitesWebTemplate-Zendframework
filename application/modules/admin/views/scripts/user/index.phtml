@@ -1,0 +1,108 @@
+<?php
+/**
+ * @file		listuser.phtml
+ *
+ * @category   	Compassites
+ * @package    	Compassites_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+?>
+
+<div class="navlink">
+	<a href="<?php echo $this->url(
+									array(
+										'module'=> 'admin',
+										'controller'=> 'user',
+										'action'=> 'registeruser',
+									),
+									'default',
+									true);
+			?>
+	">
+		Add User
+	</a>
+</div>
+
+<?php
+	if( !empty($this->message) )
+	{
+		echo '<div class="message warning">'. $this->message.'</div>' ;
+	}
+?>
+
+	<table id="listuser" class="table_format">
+		<thead>
+		<tr>
+	  		<th> Sr. No.</th>
+	  		<th> User Id</th>
+	  		<th> User Name 	</th>
+	  		<th> Name </th>
+	  		<th> City </th>
+	  		<th> Role </th>
+	  		<th> Action1 </th>
+	  		<th> Action2 </th>
+		</tr>
+		</thead>
+		<tbody>
+	    <?php
+
+	    	$i = 1;
+			$page = $this->pagecount -1;
+
+			if( $page > 0 )
+			{
+				$i = ($page * $this->recordscount)+1;
+			}
+
+	    	foreach( $this->paginator as $user )
+	    	{
+	    ?>
+			<tr>
+				<td><?php echo $i ?></td>
+				<td> <?php echo $user['userId']; ?> </td>
+				<td> <?php echo $user['username']; ?> </td>
+				<td> <?php echo $user['firstName']; ?> </td>
+				<td> <?php echo $user['city']; ?> </td>
+				<td> <?php echo $this->options[$user['roleId']]; ?></td>
+				<td>
+					<a href="<?php echo $this->url(
+											array(
+												'module'	=> 'admin',
+												'controller'=> 'user',
+												'action'=> 'editrole',
+												'userId' => $user['userId'],
+											),
+											'default',
+											true);
+							?>">
+					Edit Role
+					</a>
+				</td>
+
+				<td>
+					<a href="<?php echo $this->url(
+											array(
+												'module'	=> 'admin',
+												'controller'=> 'user',
+												'action'=> 'edituser',
+												'userId' => $user['userId'],
+											),
+											'default',
+											true);
+							?>">
+					Edit Details
+					</a>
+				</td>
+
+			</tr>
+	    <?php
+	    	$i++;
+	    	}
+	    ?>
+	    </tbody>
+	</table>
+
+	<?php echo $this->paginationControl($this->paginator,'sliding', 'paginator.phtml'); ?>

@@ -1,0 +1,196 @@
+<?php
+/**
+ * @file		layout.phtml
+ *
+ * @category   	Compassites
+ * @package    	Compassites_Layout
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+
+	# css/js version
+	$version    = '0.3';
+
+	# Loader Url
+	if( APPLICATION_ENV == 'development' )
+	{
+		$version    = 'Debug'; // Debug mode
+	}
+	$cssVersion = '/cssloader.php?files=' . $version; // css
+    $jsVersion  = '/jsloader.php?files=' . $version; // js
+	if( APPLICATION_ENV != 'development' )
+	{
+		$cssVersion = '/cssloader-' . $version; // css
+		$jsVersion  = '/jsloader/' . $version; // js
+	}
+	# default CSS includes
+	$cssFilesDefault = $cssVersion .'-lib_reset-lib_layout-lib_navigation-lib_common';
+
+	# base url
+	$baseUrl		= $this->baseUrl();
+	$linkBaseUrl 	= $this->baseUrl();
+	if( APPLICATION_ENV == 'development' )
+	{
+		$linkBaseUrl .= '/index.php';
+	}
+	
+	# Front controller info
+	$front 		= Zend_Controller_Front::getInstance();
+	$request	= $front->getRequest();
+	$module		= $request->getModuleName();
+	$controller	= $request->getControllerName();
+	$action		= $request->getActionName();
+
+	# Page title build
+	if( !isset($this->title))
+	{
+		$this->title = 'Compassites::' ;
+
+		if( 'default' != $module )
+		{
+			$this->title = ucfirst($module);
+		}
+		if( 'index' != $controller )
+		{
+			$this->title .= ucfirst($controller);
+		}
+		if( 'index' != $action )
+		{
+			$this->title = ' '. ucfirst($action);
+		}
+	}
+
+	# Keywords , Customise the keyword at the view to overwrite the default keyword.
+	if( !isset($this->metaKeywords) )
+	{
+		$this->metaKeywords = 'Software,Development,webapps';
+	}
+	# Meta Description,  Customise the description at the view to overwrite the default description.
+	if( !isset($this->metaDescription) )
+	{
+		$this->metaDescription = 'Compassites - Web Development';
+	}
+
+	# Build Urls
+    $homeUrl			= $this->url(array('controller'=>'index'), 'default', true);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords"  content="<?php echo $this->metaKeywords; ?>" />
+	<meta name="description" content="<?php echo $this->metaDescription; ?>" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+	<title>Compassites:: <?php echo $this->title; ?></title>
+
+	<link rel="Shortcut Icon" type="image/ico" href="<?php echo $baseUrl;?>/images/favicon.ico" />
+	<?php
+		# common css
+		echo '<link href="'.$baseUrl.$cssFilesDefault.'.css" media="screen" rel="stylesheet" type="text/css" />', "\n";
+
+		if( count($this->headLink()) )
+		{
+			$cssFiles 		= $cssVersion;
+			foreach ($this->headLink() as $item)
+			{
+				$file 	= pathinfo($item->href);
+				$dir	= explode('css/', $file['dirname'] );
+				$path	= '';
+				if( !empty($dir[1]) )
+				{
+					$path   = str_replace('/', '_', $dir[1]) . '_';
+				}
+				$cssFiles .= '-' . $path . $file['filename'];
+			}
+			# page specific css
+			echo '<link href="'.$baseUrl.$cssFiles.'.css" media="screen" rel="stylesheet" type="text/css" />', "\n";
+		}
+
+		echo '<script type="text/javascript"> var baseUrl = "' . $baseUrl . '"; </script>';
+		echo '<script type="text/javascript"> var linkBaseUrl = "' . $linkBaseUrl . '"; </script>';
+	?>
+
+	<!--[if IE]>
+		<link href="<?php echo $baseUrl . $cssVersion;  ?>-ie.css" media="screen" rel="stylesheet" type="text/css" />
+    <![endif]-->
+</head>
+
+<body>
+	<header>
+		<div class="content_wrapper">
+			<div class="logo">
+				<a href="<?php echo $homeUrl; ?>"><img src="<?php echo $baseUrl;?>/images/logo.png" width="240" height="53" alt="Compassites" /></a>
+			</div>
+
+			<div id="navigation" class="nav">
+			<?php
+				$obj = $this->menu('main');
+				echo $obj;
+			?>
+			</div>
+		</div>
+	</header>
+
+	<!-- main content start -->
+	<section id="content_main">
+		<div class="content_wrapper">
+		<?php
+			echo $this->breadcrumb();
+			echo $this->layout()->content;
+		?>
+		<div class="clear"></div>
+		</div>
+	</section>
+	<!-- main content end -->
+
+	<footer>
+	<?php
+		# Build Urls
+		$aboutusUrl			= $this->url(array('controller'=> 'index', 'action'	=> 'aboutus'), 'default', true);
+		$feedbackUrl		= $this->url(array('controller'=> 'index', 'action'	=> 'feedback'), 'default', true);
+		$faqUrl				= $this->url(array('controller'=> 'index', 'action'	=> 'faq'), 'default', true);
+		$contactUrl			= $this->url(array('controller'=> 'index', 'action'	=> 'contactus'), 'default', true);
+	?>
+		<div class="content_wrapper">
+			<ul>
+				<li><a href="<?php echo $aboutusUrl; ?>">About Us</a>|</li>
+				<li><a href="<?php echo $faqUrl; ?>">FAQ</a>|</li>
+ 				<li><a href="<?php echo $feedbackUrl; ?>">Feedback</a>|</li>
+				<li><a href="<?php echo $contactUrl; ?>">Contact Us</a></li>
+				<!--<li><span id="svnrevision" title="$Date: 2012-01-05 17:43:17 +0530 (Thu, 05 Jan 2012) $ - $Revision: 520 $">Version: 0.9</span></li>-->
+			</ul>
+
+            <!-- Powered by: <a href="http://www.compassitesinc.com/" target="_blank">Compassites Software Solutions Pvt. Ltd.</a> &nbsp; | &nbsp;-->
+		</div>
+	</footer>
+
+	<?php
+        # Common Js
+		$jsFilesDefault = "{$baseUrl}{$jsVersion}-lib_jquery-lib_compassites.js";
+		echo '<script type="text/javascript" src="'.$jsFilesDefault.'"></script>';
+
+		$jsFiles 		= '';
+		if( count($this->headScript()) )
+		{
+			foreach ($this->headScript() as $item)
+			{
+				$file 	= pathinfo($item->attributes['src']);
+				$dir	= explode('js/', $file['dirname'] );
+				$path	= '';
+				if( !empty($dir[1]) )
+				{
+					$path   = str_replace('/', '_', $dir[1]) . '_';
+				}
+				$jsFiles .= '-' . $path . $file['filename'];
+			}
+
+			# page specific js
+            $jsFiles = "{$baseUrl}{$jsVersion}{$jsFiles}.js";
+			echo '<script language="JavaScript" type="text/javascript" src="'.$jsFiles.'"></script>';
+		}
+	?>
+	</body>
+</html>

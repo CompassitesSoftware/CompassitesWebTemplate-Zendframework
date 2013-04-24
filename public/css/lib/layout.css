@@ -1,0 +1,97 @@
+/* Compassites Layout CSS Document */
+
+/* Header CSS starts here*/
+header
+{
+	float:left;
+	width:100%;
+	min-width:998px;
+
+	background:#eaf2f5;
+	background:-webkit-linear-gradient(top, #eaf2f5, #eaf2f5 91%, #d5e6eb);
+	background:-moz-linear-gradient(top, #eaf2f5, #eaf2f5 91%, #d5e6eb);
+	background:linear-gradient(top, #eaf2f5, #eaf2f5 91%, #d5e6eb);
+
+	border-bottom:1px solid #c6c9ce;
+}
+.logo
+{
+	float:left;
+	padding-top:15px;
+}
+.nav
+{
+	float:right;
+	width:500px;
+}
+/* Header CSS ends here*/
+
+section#content_main
+{
+	min-height:400px;
+}
+
+aside#content_left
+{
+	float:left;
+	width: 200px;
+}
+aside#content_right
+{
+	float:left;
+	width:200px;
+}
+
+/* Footer CSS starts here*/
+footer
+{
+	clear:both;
+	color:#565656;
+
+	text-align:center;
+	padding:0 0 10px;
+	min-width:998px;
+
+	background:#f1f1f1;
+}
+footer ul
+{
+	margin:0px;
+	padding: 10px;
+	list-style:none;
+}
+footer ul li
+{
+	font-size:85%;
+	word-spacing:1px;
+	display:inline;
+	color:#565656;
+}
+footer a
+{
+	padding: 0 10px;
+
+	color:#565656;
+	text-shadow:#fff 1px 1px 0px;
+	text-decoration:none;
+
+	-webkit-transition:all 0.4s ease-in-out;
+	-moz-transition:all 0.4s ease-in-out;
+	transition:all 0.4s ease-in-out;
+}
+footer a:hover
+{
+	color:#000;
+	text-decoration:underline;
+}
+/* Footer CSS ends here*/
+
+.content_wrapper
+{
+	width:998px;
+	margin:0 auto;
+}
+
+#admin {
+	background: rgb(231,228,200);
+}

@@ -1,0 +1,11 @@
+
+section input[type="text"]
+{
+	width: auto;
+}
+
+section, aside, footer
+{
+	background: rgb(33,47,64);
+    filter: alpha(opacity = 80);
+}

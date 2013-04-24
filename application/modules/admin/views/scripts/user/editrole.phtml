@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file		editrole.phtml
+ *
+ * @category   	Compassites
+ * @package    	Compassites_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+ ?>
+
+<?php
+	if( !empty($this->message) )
+	{
+		echo '<div class="message warning">'. $this->message.'</div>' ;
+	}
+
+	echo $this->error;
+
+	echo "<h4>User Name: {$this->username}</h4>";
+
+	echo $this->form;
+?>

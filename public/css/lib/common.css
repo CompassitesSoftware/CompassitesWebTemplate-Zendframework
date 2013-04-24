@@ -1,0 +1,70 @@
+/*  Main CSS Document */
+
+/* Custom Font */
+@font-face
+{
+    font-family: 'WalkwaySemiBoldRegular';
+    src: url('fonts/walkway_semibold-webfont.eot?#iefix') format('embedded-opentype'),
+    	 url('fonts/walkway_semibold-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Basic CSS starts here*/
+body, select, input, textarea
+{
+	font: 12px/1.231 Arial, Helvetica, sans-serif;
+	font-smooth: always;
+}
+
+h1
+{
+	font-size: 24px;
+}
+
+h2
+{
+	font-size: 18px;
+}
+
+h3
+{
+	font-size: 16px;
+}
+
+a, input, button
+{
+	outline: none;
+}
+
+.clear
+{
+	clear: both;
+}
+/* Basic CSS ends here*/
+
+/* CSS3 start */
+.rounded
+{
+	<?php CSS3::boxShadow('4px'); ?>
+}
+
+.gradient
+{
+	<?php CSS3::gradient('#eaf2f5', '#d5e6eb'); ?>
+}
+
+.boxshadow
+{
+	<?php CSS3::boxShadow('4px', '#ccc'); ?>
+}
+
+.boxshadowInset
+{
+	<?php CSS3::boxShadow('4px', '#ccc', true); ?>
+}
+
+.gradientComplex
+{
+	<?php CSS3::gradient('#eaf2f5, #eaf2f5 91%', '#d5e6eb'); ?>
+}

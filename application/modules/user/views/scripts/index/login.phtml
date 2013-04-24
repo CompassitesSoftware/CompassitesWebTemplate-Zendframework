@@ -1,0 +1,29 @@
+<?php
+/**
+ * @file		login.phtml
+ *
+ * @category    Compassites
+ * @package    	Compassites_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+	$this->headLink()->appendStylesheet($this->baseUrl('css/lib/form.css'));
+?>
+<?php
+	$this->title 			= 'Login';
+	$this->metaKeywords 	= '';
+	$this->metaDescription 	= '';
+?>
+<h1>Login</h1>
+<?php
+	if( !empty($this->message) )
+	{
+		echo '<div class="message warning">'. $this->message.'</div>';
+	}
+
+	echo $this->form;
+	$url = $this->url(array('controller'=>'user', 'action'	=>'forgotpassword',), 'default', true);
+	echo "<a class='forgotpassword' href = '{$url}'>Forgot Password ?</a>";
+?>

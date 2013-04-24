@@ -1,0 +1,80 @@
+<?php
+/**
+ * @file		viewuser.phtml
+ *
+ * @category   	Compassites
+ * @package    	Compassites_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+?>
+
+<?php
+	if( !empty($this->message) )
+	{
+		echo '<div class="message warning">'. $this->message.'</div>' ;
+	}
+?>
+
+	<table id="viewuser" class="table_format">
+		<tbody>
+			<tr>
+				<th>Field</th>
+				<th>Value</th>
+			</tr>
+	  		<tr>
+				<td>User ID:</td>
+				<td><?php  echo $this->userRow->user_id; ?> </td>
+			</tr>
+			<tr>
+				<td>User Name:</td>
+				<td>?php  echo $this->userRow->username; ?> </td>
+			</tr>
+			<tr>
+				<td>Name:</td>
+				<td><?php  echo $this->userRow->displayname; ?> </td>
+			</tr>
+			<tr>
+				<td>Gender:</td>
+				<td><?php  echo $this->userRow->gender; ?> </td>
+			</tr>
+			<tr>
+				<td>Date Of Birth:</td>
+				<td><?php  echo $this->userRow->birth_date; ?> </td>
+			</tr>
+			<tr>
+				<td>Role:</td>
+				<td><?php  echo $this->role; ?></td>
+			</tr>
+			<tr>
+				<td>E-mail ID:	</td>
+				<td><?php  echo $this->userRow->email; ?> </td>
+			</tr>
+			<tr>
+				<td>Contact No:	</td>
+				<td><?php  echo $this->userRow->contact_no; ?> </td>
+			</tr>
+			<tr>
+				<td>Contact Address:	</td>
+				<td><?php  echo $this->userRow->contact_address; ?> </td>
+			</tr>
+			<tr>
+				<td>Current Center:	</td>
+				<td><?php  echo $this->centerName; ?></td>
+			</tr>
+			<tr>
+				<td>Education Level:	</td>
+				<td><?php  echo $this->educationlevel; ?></td>
+			</tr>
+			<tr>
+				<td>Education:	</td>
+				<td><?php  echo $this->userRow->education; ?> </td>
+			</tr>
+
+				<tr>
+				<td>Status:	</td>
+				<td><?php  echo $this->userRow->enabled; ?> </td>
+			</tr>
+	</table>

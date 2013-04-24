@@ -1,0 +1,93 @@
+<?php
+/**
+ * @file		index.phtml
+ *
+ * @category   	Admin
+ * @package    	Admin_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+?>
+
+<?php
+ # Javascript
+ $this->headScript()->appendFile($this->baseUrl()."/js/acl.js");
+?>
+<div class="navlink">
+	<a href="<?php echo $this->url(
+									array(
+										'module'=> 'admin',
+										'controller'=> 'acl',
+										'action'=> 'add',
+									),
+									'default',
+									true);
+			?>
+	">
+	Add ACL
+	</a>
+</div>
+
+<?php
+	echo '<div class="message warning">'. $this->message.'</div>' ;
+
+	echo $this->form;
+?>
+
+	<table id="listuser" class="table_format">
+		<thead>
+			<tr>
+				<th> Sr. No. </th>
+				<th> Resource </th>
+				<th> Role </th>
+				<th> Allow </th>
+				<th> Edit </th>
+				<th> Delete </th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+				$i 		= 1;
+				$page 	= $this->pagecount -1;
+
+				if( $page > 0 )
+				{
+					$i 	= ($page * $this->recordscount)+1;
+				}
+
+				foreach( $this->paginator as $acl )
+				{
+			?>
+				<tr id="recordSet_<?php echo $acl['aclId'];?>">
+					<td> <?php echo $i ?> </td>
+					<td> <?php echo $acl['resource']; ?> </td>
+					<td> <?php echo $this->options[$acl['roleId']]; ?> </td>
+					<td> <?php echo $allow=($acl['allow']=='1')?"Yes":"No"; ?> </td>
+					<td>
+						<a href="<?php echo $this->url(
+												array(
+													'module'	=> 'admin',
+													'controller'=> 'acl',
+													'action'=> 'edit',
+													'aclId' => $acl['aclId'],
+												),
+												'default',
+												true);
+								?>">
+						Edit
+						</a>
+					</td>
+					<td>
+						<a href="#" class="deleteRecord" aclId="<?php echo $acl['aclId']?>">Delete</a>
+					</td>
+				</tr>
+			<?php
+					$i++;
+				}
+			?>
+		</tbody>
+	</table>
+
+<?php echo $this->paginationControl($this->paginator,'sliding', 'paginator.phtml'); ?>

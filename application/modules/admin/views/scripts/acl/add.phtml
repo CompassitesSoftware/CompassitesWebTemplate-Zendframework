@@ -1,0 +1,27 @@
+<?php
+/**
+ * @file		add.phtml
+ *
+ * @category   	Admin
+ * @package    	Admin_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+?>
+
+<?php
+	# Css
+	$this->headLink()->appendStylesheet($this->baseUrl()."/jquery.validationEngine.css");
+
+	# Javascript
+	$this->headScript()->appendFile($this->baseUrl()."/js/acl.add.js");
+
+	if( !empty($this->message) )
+	{
+		echo '<div class="message warning">'. $this->message.'</div>' ;
+	}
+
+	echo $this->form;
+?>

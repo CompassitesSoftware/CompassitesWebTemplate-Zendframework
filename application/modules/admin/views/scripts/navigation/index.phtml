@@ -1,0 +1,106 @@
+<?php
+/**
+ * @file		index.phtml
+ *
+ * @category   	Admin
+ * @package    	Admin_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+?>
+<?php
+  # Javascript
+  $this->headScript()->appendFile($this->baseUrl()."/js/navigation.js");
+?>
+<div class="navlink">
+	<a href="<?php echo $this->url(
+									array(
+										'module'=> 'admin',
+										'controller'=> 'navigation',
+										'action'=> 'add',
+									),
+									'default',
+									true);
+			?>
+	">
+	Add Navigation
+	</a>
+</div>
+
+<?php
+	echo '<div class="message warning">'. $this->message.'</div>' ;
+
+	echo $this->form;
+?>
+	<table id="listuser" class="table_format">
+		<thead>
+			<tr>
+				<th> Sr. No. </th>
+				<th> Module </th>
+				<th> Section </th>
+				<th> Controller </th>
+				<th> Action </th>
+				<th> Name </th>
+				<th> Edit </th>
+				<th> Delete </th>
+			</tr>
+		</thead>
+		<tbody>
+	    <?php
+	    	$i 		= 1;
+			$page 	= $this->pagecount -1;
+
+			if( $page > 0 )
+			{
+				$i 	= ($page * $this->recordscount)+1;
+			}
+
+	    	foreach( $this->paginator as $navigator )
+	    	{
+	    ?>
+			<tr id="recordSet_<?php echo $navigator['navigationId'];?>">
+				<td> <?php echo $i ?> </td>
+				<td> <?php echo $navigator['module']; ?> </td>
+				<td> <?php echo $navigator['section']; ?> </td>
+				<td> <?php echo $navigator['controller']; ?> </td>
+				<td> <?php echo $navigator['action']; ?> </td>
+				<td> <?php echo $navigator['name']; ?> </td>
+				<td>
+					<a href="<?php echo $this->url(
+											array(
+												'module'	=> 'admin',
+												'controller'=> 'navigation',
+												'action'=> 'edit',
+												'navigationId' => $navigator['navigationId'],
+											),
+											'default',
+											true);
+							?>">
+					Edit
+					</a>
+				</td>
+				<td>
+					<a href="<?php echo $this->url(
+											array(
+												'module'	=> 'admin',
+												'controller'=> 'navigation',
+												'action'=> 'index'
+											),
+											'default',
+											true);
+							?>"
+						class="deleteRecord" navigationId="<?php echo $navigator['navigationId']?>">
+					Delete
+					</a>
+				</td>
+			</tr>
+	    <?php
+				$i++;
+	    	}
+	    ?>
+	    </tbody>
+	</table>
+
+	<?php echo $this->paginationControl($this->paginator,'sliding', 'paginator.phtml'); ?>

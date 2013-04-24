@@ -1,0 +1,96 @@
+/* Form Styling */
+dl{
+	width: 100%;
+	float: left;
+}
+
+:-moz-placeholder{
+	color: #ccc;
+}
+
+::-webkit-input-placeholder{
+	color: #ccc;
+}
+
+.zend_form dt, dd {
+	min-height: 25px;
+}
+
+.zend_form dt {
+	float: left;
+	clear: left;
+	text-align: right;
+	min-width: 300px;
+	margin: 0 5px 0 0;
+	line-height: 30px;
+}
+
+.zend_form dt label.required {
+	font-weight: bold;
+}
+
+.zend_form dd {
+	float: left;
+	margin: 0 0 10px;
+}
+
+.zend_form dd ul.errors {
+	list-style: none;
+	padding: 0;
+	margin: 0 5px 5px 0;
+}
+
+.zend_form{
+	color: #4b4b4b;
+	margin: 25px 0 0 0;
+}
+
+.zen_form #username-label{
+	margin:0px 5px 0 0;
+}
+
+.zend_form input[type=text], .zend_form input[type=password], .zend_form input[type=file], .zend_form select, .zend_form textarea{
+	min-width:200px;
+	font-style: normal;
+	margin: 2px 0 0;
+	padding: 3px 5px;
+	border:1px solid #d0d0d0;
+	border-radius:2px;
+	background: #FFFFFF;
+}
+
+.zend_form input[type=submit], .zend_form input[type=reset], .zend_form button, button{
+	background: #45adca;
+    background:-webkit-linear-gradient(top, #56bddc, #349dbb);
+    background:-moz-linear-gradient(top, #56bddc, #349dbb);
+    background:linear-gradient(top, #56bddc, #349dbb);
+
+	border: 1px solid #2d8ba5;
+    border-radius: 3px;
+   	text-shadow: 0 -1px 0 #337d96;
+    color: #fff;
+    padding: 5px;
+    min-width: 60px;
+}
+
+.zend_form input[type=submit]{
+	margin: 0 10px 0 0;
+}
+
+.zend_form input[type=submit]:hover, .zend_form input[type=button]:hover, .zend_form input[type=reset]:hover, input[type=button]:hover,{
+	cursor:pointer;
+}
+
+.zend_form input[type=submit]:active, .zend_form input[type=button]:active, .zend_form input[type=reset]:active , input[type=button]:active,{
+	position:relative;
+	top:1px;
+}
+
+.errors li {
+	float: left;
+	font-size: 11px;
+}
+
+.mandatory{
+	color: #FF0000;
+}

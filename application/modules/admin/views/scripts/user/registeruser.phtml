@@ -1,0 +1,23 @@
+<?php
+/**
+ * @file		registeruser.phtml
+ *
+ * @category   	Compassites
+ * @package    	Compassites_View
+ * @author     	Compassites Team
+ * @copyright  	Copyright (c) 2011 Compassites (http://www.compassitesinc.com)
+ *
+ * @version		SVN: $Id: $
+ */
+?>
+
+<?php
+
+	if( !empty($this->message) )
+	{
+		echo '<div class="message warning">'. $this->message.'</div>' ;
+
+	}
+
+	echo $this->form;
+?>
