@@ -25,38 +25,120 @@ class Admin_UserController extends Zend_Controller_Action
 
 	public function init()
 	{
-		$this->_userTableObj= new User_Model_User();
-		$this->_navigationTableObj = new Admin_Model_Navigation();
-		$this->_logger		= Zend_Registry::get('Zend_Log');
+		$this->_userTableObj		= new User_Model_User();
+		$this->_navigationTableObj 	= new Admin_Model_Navigation();
+		$this->_logger				= Zend_Registry::get('Zend_Log');
 	}
 
 	#  List Users Action
 	public function indexAction()
 	{
-		# Get role and user tables
-		$roleModel = new User_Model_Role();
-
-		# Get agent users from users table and display using paginator
-		$this->view->paginator	 	= $paginator = Zend_Paginator::factory( $this->_userTableObj->getDbTable()->select()->where('roleId > 1') );
-		$this->view->pagecount 		= $this->_getParam('page');
-		$this->view->recordscount 	= $recordscount = 25;
-
-		$paginator->setCurrentPageNumber($this->_getParam('page'));
-//  		$paginator->setItemCountPerPage($recordscount);
-		$paginator->setCache(Zend_Registry::get('cache'));
-
-		# Get role of each user.
-		$ops = $roleModel->getAll();
-		$options = array();
-		foreach ($ops as $op)
+		if( $this->getRequest()->isXmlHttpRequest())
 		{
-			$options[$op['roleId']] = $op['title'];
+			$roleModel  = new User_Model_Role();
+			$userData	= array();
+			# Disable the layout
+			$this->_helper->layout()->disableLayout();
+			$this->_helper->viewRenderer->setNoRender();
+
+			$getParams		= $this->getRequest()->getParams();
+			$page 			= $getParams['page']; # Get the requested page
+			$limit 			= $getParams['rows']; # Get how many rows we want to have into the grid
+			$orderby 		= $getParams['sidx']; # Get index row - i.e. user click to sort
+			$order 			= $getParams['sord']; # Get the direction
+			$searchField 	= $this->getRequest()->getQuery('searchField', '') ;
+			$searchString	= $this->getRequest()->getQuery('searchString', '');
+			
+			# Getting the data from table
+			$offset = 0;
+			if( $page > 0 )
+			{
+				$offset		= $limit * ($page -1);
+			}
+
+			$where = array();
+			if(!empty($searchField))
+			{
+				$where = array($searchField => $searchString);
+			}
+			$data = $this->_userTableObj->getAllByField($where, $limit, $offset, $order, $orderby);
+
+			if(!empty($data))
+			{
+				foreach($data as &$user)
+				{
+					$roleData = $roleModel->get($user['roleId']);
+					$user = array_merge($user, $roleData);
+				}
+
+				#getting the data from table
+				$userData['rows']		= array_values($data);
+				$userData['page'] 		= $page;
+				$userData['records']	= $this->_userTableObj->getCount();
+				$userData['total']		= ceil($userData['records'] / $limit);
+			}
+
+			echo json_encode($userData, JSON_NUMERIC_CHECK);
 		}
-		$this->view->options = $options;
 	}
 
 
-	#  Display User details
+	public function getjsonAction()
+	{
+		# Get role and user tables
+		$roleModel = new User_Model_Role();
+		#disable the layout
+		$this->_helper->layout()->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+		if( $this->getRequest()->isXmlHttpRequest())
+		{
+			# Get role of each user.
+			$ops		= $roleModel->getAll();
+			$options	= array();
+			foreach ($ops as $op)
+			{
+				$options[$op['roleId']] = $op['title'];
+			}
+
+			echo json_encode($options);
+		}
+	}
+	public function exportAction()
+	{
+		$roleModel  = new User_Model_Role();
+		# Disable the layout/view
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNeverRender();
+
+		$offset  		= 0;
+		$page 			= 0;
+		$limit 			= 0;
+		$orderby 		= '';
+		$order 			= '';
+
+		# Header added for exporting the data to CSV file
+		header("Content-Type: text/csv; charset=utf-8");
+		header("Cache-Control: no-store, no-cache");
+		header("Content-Disposition: attachment; filename=UserList.csv");
+
+		$output = fopen('php://output', 'w');
+		fputcsv($output, array( 'User Id', 'Email', 'First Name',  'Last Name', 'Contact No', 'Mobile No', 'Address Line 1', 'Address Line 2', 'Area', 'City', 'Pincode', 'Role'));
+
+		
+		$data = $this->_userTableObj->getAllByField(array(), $limit, $offset, $order, $orderby);
+
+		if(!empty($data))
+		{
+			foreach($data as $user)
+			{
+				$roleData = $roleModel->get($user['roleId']);
+				$user = array($user['userId'], $user['username'], $user['firstName'], $user['lastName'], $user['landLine'], $user['mobile'], $user['addressLine1'], $user['addressLine2'], $user['area'], $user['city'], $user['pincode'], $roleData['title']);
+				fputcsv($output, $user);
+			}
+		}
+
+	}
+
 	public function viewuserAction()
 	{
 		$userId 	= $this->_getParam('user_id');
@@ -134,38 +216,15 @@ class Admin_UserController extends Zend_Controller_Action
      */
 	public function edituserAction()
 	{
-		# form helper to change user's details
-		$this->view->form 		= $form = new user_Form_Activate();
-		$this->view->username 	= '';
-		$this->view->error 		= '';
-		$userId					= (int) $this->_getParam('userId');
-		$userRow 				= $this->_userTableObj->get($userId, true);
-
-		if (!empty($userRow) )
+		if( $this->getRequest()->isPost())
 		{
-			# Set saved field values for the user
-			$userArray = $userRow;
-			unset($userArray['password']);
-			unset($userArray['language']);
-			$form->populate($userArray);
-
-			# Get values from Form and update the database record for that particular user.
-			if( $this->getRequest()->isPost() && $form->isValid($this->getRequest()->getPost()))
-			{
-				$formValues = $form->getValues();
-
-				$result = $this->_userTableObj->update($formValues, true);
-
-				# if it has changed redirect to list of users, else stay in form itself.
-				if( !empty($result) )
-				{
-					return $this->_helper->redirector('user', 'index');
-				}
-			}
-		}
-		else
-		{
-			$this->view->error = 'No record present for this user.';
+			$formValues	= $this->getRequest()->getPost();
+			$formValues['userId'] = $formValues['id'];
+			$formValues['roleId'] = $formValues['title'];
+			unset($formValues['id']);
+			unset($formValues['title']);
+			unset($formValues['oper']);
+			$result		= $this->_userTableObj->update($formValues, true);
 		}
 	}
 

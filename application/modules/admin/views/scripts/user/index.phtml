@@ -9,6 +9,13 @@
  *
  * @version		SVN: $Id: $
  */
+$this->headLink()->appendStylesheet($this->baseUrl().'css/jquery.ui.css');
+$this->headLink()->appendStylesheet($this->baseUrl().'css/lib/jquery.ui.jqgrid.css');
+
+$this->headScript()->appendFile($this->baseUrl().'js/lib/jquery.jqgrid.js');
+$this->headScript()->appendFile($this->baseUrl().'js/lib/jquery.jqgrid.locale.en.js');
+
+$this->headScript()->appendFile($this->baseUrl().'/js/user.js');
 ?>
 
 <div class="navlink">
@@ -33,76 +40,6 @@
 	}
 ?>
 
-	<table id="listuser" class="table_format">
-		<thead>
-		<tr>
-	  		<th> Sr. No.</th>
-	  		<th> User Id</th>
-	  		<th> User Name 	</th>
-	  		<th> Name </th>
-	  		<th> City </th>
-	  		<th> Role </th>
-	  		<th> Action1 </th>
-	  		<th> Action2 </th>
-		</tr>
-		</thead>
-		<tbody>
-	    <?php
-
-	    	$i = 1;
-			$page = $this->pagecount -1;
-
-			if( $page > 0 )
-			{
-				$i = ($page * $this->recordscount)+1;
-			}
-
-	    	foreach( $this->paginator as $user )
-	    	{
-	    ?>
-			<tr>
-				<td><?php echo $i ?></td>
-				<td> <?php echo $user['userId']; ?> </td>
-				<td> <?php echo $user['username']; ?> </td>
-				<td> <?php echo $user['firstName']; ?> </td>
-				<td> <?php echo $user['city']; ?> </td>
-				<td> <?php echo $this->options[$user['roleId']]; ?></td>
-				<td>
-					<a href="<?php echo $this->url(
-											array(
-												'module'	=> 'admin',
-												'controller'=> 'user',
-												'action'=> 'editrole',
-												'userId' => $user['userId'],
-											),
-											'default',
-											true);
-							?>">
-					Edit Role
-					</a>
-				</td>
-
-				<td>
-					<a href="<?php echo $this->url(
-											array(
-												'module'	=> 'admin',
-												'controller'=> 'user',
-												'action'=> 'edituser',
-												'userId' => $user['userId'],
-											),
-											'default',
-											true);
-							?>">
-					Edit Details
-					</a>
-				</td>
-
-			</tr>
-	    <?php
-	    	$i++;
-	    	}
-	    ?>
-	    </tbody>
-	</table>
-
-	<?php echo $this->paginationControl($this->paginator,'sliding', 'paginator.phtml'); ?>
+<div class="clear"></div>
+<table id="list" class="table_format"></table>
+<div id="pager"></div>

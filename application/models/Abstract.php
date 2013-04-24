@@ -84,10 +84,10 @@ abstract class Compassites_Model_Abstract
      * @brief	Update record
      *
      * @param  	array  	update data (primarykey is must to update data)
-     * @param 	boolean	disable cache [false]
+     * @param 	boolean	disable cache [true]
      * @return 	int		no of affected/updated rows
      */
-	public function update(array $data, $cleanUserCache=false)
+	public function update(array $data, $cleanCache=true)
 	{
 		$dbTable		= $this->getDbTable();
 		$updatedRows 	= 0;
@@ -95,11 +95,11 @@ abstract class Compassites_Model_Abstract
 		$primaryKeyName	= $this->getPrimaryKey();
 		$updateData		= $this->getValidColumns($data);
 
-		if( !empty($data[$primaryKeyName]) )
+		if( !empty($updateData[$primaryKeyName]) )
 		{
 			# update by primary key
-			$primaryKey = (int) $data[$primaryKeyName];
-			unset($data[$primaryKeyName]);
+			$primaryKey = (int) $updateData[$primaryKeyName];
+			unset($updateData[$primaryKeyName]);
 
 			$whereArray = array($primaryKeyName . ' = ?' => $primaryKey);
 		}
@@ -116,8 +116,8 @@ abstract class Compassites_Model_Abstract
 				$this->logger->log($e->getMessage(), Zend_Log::ERR);
 			}
 
-			# clean up the user getcurrentuser cache
-			if( $cleanUserCache )
+			# clean up cache
+			if( $cleanCache )
 			{
 				$this->get($primaryKey, true);
 			}
@@ -194,18 +194,23 @@ abstract class Compassites_Model_Abstract
      * @param 	boolean		disable cache [false]
      * @return 	Object
      */
-	public function getAll($limit=100, $noCache=false)
+	public function getAll($limit=100, $offset=0, $order='ASC', $orderBy='', $noCache=false)
     {
-    	$dbTable 	= $this->getDbTable();
+    	$dbTable 		= $this->getDbTable();
     	$primaryKeyName = $this->getPrimaryKey();
 
-		$cacheKey	= APPLICATION_NAME . get_class($dbTable) . '_getAll_' . $limit;
-		$cache		= Zend_Registry::get('cache');
-		$data		= array();
+		$cacheKey		= APPLICATION_NAME . get_class($dbTable) . "_getAll_{$limit}_{$offset}_{$order}_{$orderBy}";
+		$cache			= Zend_Registry::get('cache');
+		$data			= array();
 
 		if( (!$data = $cache->load($cacheKey)) || ($noCache == true) )
 		{
-			$select = $dbTable->select()->limit($limit);
+			$select = $dbTable->select();
+			$select->limit($limit, $offset);
+			if(!empty($orderBy))
+			{
+				$select->order("{$orderBy} {$order}");
+			}
 			$rawData= $dbTable->fetchAll($select)->toArray();
 
 			foreach ($rawData as $value)
@@ -220,6 +225,36 @@ abstract class Compassites_Model_Abstract
     }
 
 	/**
+     * @brief	Get the count of rows in the table
+     *
+     * @return 	Array 	count
+     */
+	public function getCount( $whereArray=array(), $noCache=false )
+    {
+    	$dbTable 	= $this->getDbTable();
+		$cacheKey	= APPLICATION_NAME . get_class($dbTable) . '_getCount';
+		$cache		= Zend_Registry::get('cache');
+		$count 		= 0;
+		$where		= '1';
+
+		if( (!$count = $cache->load($cacheKey)) || ($noCache == true) )
+		{
+			$select = $dbTable->select();
+			# form the where clause using the fieldArray
+			foreach($whereArray as $key => $value)
+			{
+				$where .= " AND {$key} = '{$value}'";
+			}
+			$select->where($where);
+			$count  = $dbTable->getAdapter()->query($select)->rowCount();
+
+			$cache->save($count, $cacheKey);
+		}
+
+		return $count;
+    }
+
+	/**
      * @brief	Get All Records by field in the where clause
      *
      * @param 	array		key value pair to fetch with
@@ -227,32 +262,44 @@ abstract class Compassites_Model_Abstract
      * @param 	boolean		disable cache
      * @return 	array		result set array
 	*/
-	public function getAllByField(array $fieldArray, $limit=100, $noCache=false)
+	public function getAllByField(array $fieldArray, $limit=100, $offset=0, $order='ASC', $orderBy='', $noCache=false)
 	{
 		$dbTable 		= $this->getDbTable();
 		$primaryKeyName = $this->getPrimaryKey();
-		$where			= '1';
+		$data 			= array();
 
+		$where			= '1';
 		# form the where clause using the fieldArray
 		foreach($fieldArray as $key => $value)
 		{
 			$where .= " AND {$key} = '{$value}'";
 		}
 
-		$cacheKey 		= APPLICATION_NAME . get_class($dbTable) . '_getAllByField_' . md5($where) .'_' .$limit;
-		$cache 			= Zend_Registry::get('cache');
-		$data 			= array();
+		$cacheKey 	= APPLICATION_NAME . get_class($dbTable) . '_getAllByField_' . md5($where) .'_' . $limit .'_'. $offset .'_'. $order .'_'.$orderBy;
+		$cache 		= Zend_Registry::get('cache');
 
 		if( (!$data = $cache->load($cacheKey)) || ($noCache == true) )
 		{
-			$select = $dbTable->select()->limit($limit);
+			$data	= array(); # reset the data array again as we are re-using the variable
+			$select = $dbTable->select();
+			$select->limit($limit, $offset);
+			if(!empty($orderBy))
+			{
+				$select->order("{$orderBy} {$order}");
+			}
 			$select->where($where);
+
 			$rawData = $dbTable->fetchAll($select)->toArray();
 
 			#To get the associated Array, so that it can be accessed by the primarykey value.
 			foreach ($rawData as $value)
 			{
 				$data[$value[$primaryKeyName]] = $value;
+			}
+			# in case of empty results reset the $data variable from bool to array
+			if( empty($data) )
+			{
+				$data = array();
 			}
 
 			$cache->save($data, $cacheKey);
